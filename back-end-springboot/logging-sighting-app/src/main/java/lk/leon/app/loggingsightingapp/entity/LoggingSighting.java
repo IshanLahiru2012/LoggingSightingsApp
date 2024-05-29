@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "sighting")
-public class AirlineSighting {
+public class LoggingSighting {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

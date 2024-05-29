@@ -23,8 +23,8 @@ public class User {
     private String email;
 
     @OneToMany(mappedBy = "createdUser")
-    private Set<AirlineSighting> createdSightings;
+    private Set<LoggingSighting> createdSightings;
 
     @OneToMany(mappedBy = "modifiedUser")
-    private Set<AirlineSighting> modifiedSightings;
+    private Set<LoggingSighting> modifiedSightings;
 }
