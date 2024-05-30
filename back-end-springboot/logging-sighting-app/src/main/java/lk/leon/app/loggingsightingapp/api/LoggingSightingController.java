@@ -12,7 +12,8 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("api/v1/loggingsightings")
+@CrossOrigin
+@RequestMapping("api/v1/sightings")
 @Validated
 @RequiredArgsConstructor
 public class LoggingSightingController {
@@ -29,8 +30,11 @@ public class LoggingSightingController {
         return sighting.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @PostMapping
+    @PostMapping("/create-sightings")
     public LoggingSighting createSighting(@Valid @RequestBody LoggingSighting sighting) {
+        System.out.println("awa");
+        sighting.setActive(true);
+        sighting.setDeleted(false);
         return loggingSightingService.save(sighting);
     }
 
