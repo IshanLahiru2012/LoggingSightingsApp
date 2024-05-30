@@ -5,9 +5,6 @@
 .mainPage {
     display: flex;
     flex-direction: column;
-    padding: 0;
-    margin: 0;
-    /*justify-content: space-between;*/
     min-height: 100vh;
 }
 
@@ -15,6 +12,4 @@
     height: 60px;
     background-color: lightgray;
 }
-body {
-    padding: 0;
-}
+
