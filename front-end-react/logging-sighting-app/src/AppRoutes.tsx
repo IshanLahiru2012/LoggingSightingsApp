@@ -3,6 +3,7 @@ import {Layout} from "./layouts/Layout.tsx";
 import HomePage from "./page/HomePage.tsx";
 import {SigthingDetails} from "./forms/SigthingDetails.tsx";
 import {UserDetails} from "./forms/UserDetails.tsx";
+import {SightingListPage} from "./page/SightingListPage.tsx";
 
 
 export const  AppRoutes = () =>{
@@ -24,6 +25,12 @@ export const  AppRoutes = () =>{
                            <UserDetails/>
                        </Layout>}
                 />
+                <Route path={'/sightings'}
+                       element={<Layout >
+                           <SightingListPage/>
+                       </Layout>}
+                />
+
             </Routes>
         </>
     );

@@ -12,7 +12,7 @@ export type UserReq ={
 }
 
 export type Sighting={
-    _id: string;
+    id: string;
     name: string;
     shortName: string;
     airlineCode: string;

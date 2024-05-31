@@ -16,8 +16,12 @@ export const MenuComponent = () => {
         setAnchorEl(null);
     };
     const navigate = useNavigate();
-    const handleSighting = ()=> {
+    const handlecreateSighting = ()=> {
         navigate("/manage-transfer");
+        handleClose();
+    }
+    const handleListingSightins = ()=> {
+        navigate("/sightings");
         handleClose();
     }
     return (
@@ -44,8 +48,8 @@ export const MenuComponent = () => {
             >
                 {/*<MenuItem onClick={handleProfile}>Profile</MenuItem>*/}
                 {/*<MenuItem onClick={handleStatus}>Booking Status</MenuItem>*/}
-                <MenuItem onClick={handleSighting}>Logging Sighting</MenuItem>
-                {/*<MenuItem onClick={handleLogout}>Logout</MenuItem>*/}
+                <MenuItem onClick={handlecreateSighting}>Logging Sighting</MenuItem>
+                <MenuItem onClick={handleListingSightins}>Sighting List</MenuItem>
             </Menu>
         </>
     );

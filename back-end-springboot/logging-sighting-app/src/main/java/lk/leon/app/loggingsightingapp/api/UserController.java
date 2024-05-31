@@ -21,7 +21,7 @@ public class UserController {
 
     private final UserService userService;
 
-    @GetMapping
+    @GetMapping(produces = "application/json")
     public List<User> getAllUsers() {
         return userService.findAll();
     }

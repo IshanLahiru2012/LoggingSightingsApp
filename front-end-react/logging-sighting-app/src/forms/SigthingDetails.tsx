@@ -10,11 +10,10 @@ import dayjs from "dayjs";
 import {useCreateSighting} from "../api/SightingApi.tsx";
 import { LoadingButton } from "@mui/lab";
 import SaveIcon from '@mui/icons-material/Save';
-import {useGetUserByEmail} from "../api/UserApi.tsx";
 import {useNavigate} from "react-router-dom";
 export const SigthingDetails = () => {
 
-    const {currentUser} = useGetUserByEmail(localStorage.getItem("userEmail") || "");
+    const currentUser = localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user") || ""): null;
 
     const navigate = useNavigate();
 
@@ -133,8 +132,9 @@ export const SigthingDetails = () => {
                                            loadingPosition="start"
                                            startIcon={<SaveIcon />}
                                            variant="outlined">Booking
-                            </LoadingButton> : currentUser ?
-                                <Button variant="contained" type={"submit"} onClick={()=> navigate("/login")} >Login to Submit</Button>  :
+                            </LoadingButton> :
+                            !currentUser ?
+                                <Button  variant="contained" type={"submit"} onClick={()=> navigate("/login")} >Login to Submit</Button>  :
                                 <Button variant="contained" type={"submit"} onClick={()=>onSubmit(form.getValues())} >Submit</Button>
                         }
                     </Grid>

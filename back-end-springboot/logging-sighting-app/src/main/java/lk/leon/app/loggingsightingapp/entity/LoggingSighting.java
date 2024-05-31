@@ -1,5 +1,6 @@
 package lk.leon.app.loggingsightingapp.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,7 +16,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "sighting")
-public class LoggingSighting {
+public class LoggingSighting implements Super{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -32,9 +33,9 @@ public class LoggingSighting {
     private boolean active = true;
     private boolean deleted = false;
     @ManyToOne
-    @JoinColumn(name = "created_user_id")
+    @JoinColumn(name = "created_user_id", referencedColumnName = "id")
     private User createdUser;
     @ManyToOne
-    @JoinColumn(name = "modified_user_id")
+    @JoinColumn(name = "modified_user_id",referencedColumnName = "id")
     private User modifiedUser;
 }

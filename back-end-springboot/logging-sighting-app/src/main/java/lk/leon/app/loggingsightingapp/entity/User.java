@@ -1,5 +1,6 @@
 package lk.leon.app.loggingsightingapp.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,7 +15,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "user")
-public class User {
+public class User implements Super{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -24,9 +25,11 @@ public class User {
     private String email;
 
     @ToString.Exclude
-    @OneToMany(mappedBy = "createdUser")
+    @OneToMany(mappedBy = "createdUser", fetch = FetchType.LAZY)
+    @JsonIgnore
     private Set<LoggingSighting> createdSightings;
     @ToString.Exclude
-    @OneToMany(mappedBy = "modifiedUser")
+    @OneToMany(mappedBy = "modifiedUser", fetch = FetchType.LAZY)
+    @JsonIgnore
     private Set<LoggingSighting> modifiedSightings;
 }

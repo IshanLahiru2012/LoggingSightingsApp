@@ -1,5 +1,5 @@
 import {Sighting, SightingRequest} from "../type.ts";
-import {useMutation, useQuery} from "react-query";
+import {useMutation, useQuery, useQueryClient} from "react-query";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 export const useCreateSighting = () => {
@@ -43,7 +43,10 @@ export const useCreateSighting = () => {
 export const useGetSightings = ()=>{
     const getSightingRequest = async (): Promise<Sighting[]> => {
         const resp = await fetch(`${API_BASE_URL}/api/v1/sightings`,{
-            method: "GET"
+            method: "GET",
+            headers:{
+                "Content_Type": "application/json"
+            }
         });
 
         if(!resp.ok){
@@ -55,12 +58,36 @@ export const useGetSightings = ()=>{
     const {
         data: sightings,
         isLoading
-
-    } = useQuery("fetchSightings", getSightingRequest);
+        } = useQuery("fetchSightings", getSightingRequest);
 
     return {
         sightings,
         isLoading
     }
+}
+
+export const useDeleteSighting = ()=>{
+
+    const deleteSightingReq = async(sightingId : string):Promise<void> =>{
+        const resp = await fetch(`${API_BASE_URL}/api/v1/sightings/${sightingId}`,{
+            method: "DELETE"
+        });
+
+        if(!resp.ok){
+            throw new Error("Failed to delete sighting");
+        }
+
+    }
+    const queryClient = useQueryClient();
+
+    const {
+        mutate: deleteSighting,
+        isSuccess,
+        isLoading} = useMutation( deleteSightingReq,{
+            onSuccess: ()=>{queryClient.invalidateQueries('fetchSightings')}
+        });
+
+    return{deleteSighting, isSuccess, isLoading};
+
 }
 
