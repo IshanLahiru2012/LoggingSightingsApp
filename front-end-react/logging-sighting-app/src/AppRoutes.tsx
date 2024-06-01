@@ -15,7 +15,7 @@ export const  AppRoutes = () =>{
                                     <HomePage/>
                                 </Layout>}
                 />
-                <Route path={'/manage-transfer'}
+                <Route path={'/manage-sighting'}
                        element={<Layout showFront={true}>
                            <SigthingDetails/>
                        </Layout>}
@@ -30,6 +30,7 @@ export const  AppRoutes = () =>{
                            <SightingListPage/>
                        </Layout>}
                 />
+
 
             </Routes>
         </>

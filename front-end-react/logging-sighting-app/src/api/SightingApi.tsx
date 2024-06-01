@@ -91,3 +91,60 @@ export const useDeleteSighting = ()=>{
 
 }
 
+export const useUpdateSighting = ()=>{
+
+    const updateSightingReq = async (sighting: Sighting):Promise<Sighting>=>{
+
+        const resp = await fetch(`${API_BASE_URL}/api/v1/sightings`,{
+            method:"PUT",
+            headers:{
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(sighting)
+        });
+
+        if(!resp.ok){
+            throw new Error("Failed to update sighting");
+        }
+        return resp.json();
+
+    }
+    const {
+        mutate : updateSighting,
+        isLoading,
+        isSuccess,
+        }= useMutation(updateSightingReq);
+
+    return{ updateSighting, isLoading, isSuccess}
+}
+
+export const useSearchSightings = (searchquery?: string) => {
+
+    const createSearchRequest = async (): Promise<Sighting> => {
+        const params = new URLSearchParams();
+
+        if (searchquery) { params.set("searchquery", searchquery); }
+
+        const resp = await fetch(
+            `${API_BASE_URL}/api/v1/sightings/search?${params.toString()}`
+        );
+
+        if (!resp.ok) {
+            throw new Error("Failed to get transfer");
+        }
+
+        return resp.json();
+    };
+
+    const { data: searchResult, isLoading, isSuccess } = useQuery(["searchTransfers", searchquery],
+                                                createSearchRequest,
+                                        { enabled: !!searchquery }
+    );
+
+    return {
+        searchResult,
+        isLoading,
+        isSuccess
+    };
+};
+

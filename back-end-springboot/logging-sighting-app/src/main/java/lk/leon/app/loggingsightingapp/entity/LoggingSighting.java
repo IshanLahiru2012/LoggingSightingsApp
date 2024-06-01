@@ -10,6 +10,7 @@ import javax.validation.constraints.PastOrPresent;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Entity
 @Data
@@ -29,7 +30,7 @@ public class LoggingSighting implements Super{
     @Size(max = 200)
     private String location;
     @PastOrPresent
-    private LocalDateTime createdDate;
+    private Date createdDate;
     private boolean active = true;
     private boolean deleted = false;
     @ManyToOne

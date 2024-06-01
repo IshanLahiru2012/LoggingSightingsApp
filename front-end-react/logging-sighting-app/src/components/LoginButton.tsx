@@ -10,6 +10,7 @@ export const LoginButton = () => {
                 <Button color="inherit" onClick={()=> {
                     localStorage.setItem("user", "");
                     window.location.reload();
+                    navigate("/")
                 }}>Logout {user.name}</Button> :
                 <Button color="inherit" onClick={()=> navigate("/login")}>Login</Button>
             }

@@ -3,8 +3,6 @@ import MenuIcon from "@mui/icons-material/Menu";
 import React from "react";
 import {useNavigate} from "react-router-dom";
 
-
-
 export const MenuComponent = () => {
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
@@ -17,7 +15,7 @@ export const MenuComponent = () => {
     };
     const navigate = useNavigate();
     const handlecreateSighting = ()=> {
-        navigate("/manage-transfer");
+        navigate("/manage-sighting");
         handleClose();
     }
     const handleListingSightins = ()=> {
@@ -46,8 +44,6 @@ export const MenuComponent = () => {
                 onClose={handleClose}
                 TransitionComponent={Fade}
             >
-                {/*<MenuItem onClick={handleProfile}>Profile</MenuItem>*/}
-                {/*<MenuItem onClick={handleStatus}>Booking Status</MenuItem>*/}
                 <MenuItem onClick={handlecreateSighting}>Logging Sighting</MenuItem>
                 <MenuItem onClick={handleListingSightins}>Sighting List</MenuItem>
             </Menu>

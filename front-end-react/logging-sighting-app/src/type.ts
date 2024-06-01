@@ -1,8 +1,5 @@
-import {z} from "zod";
-import {sightingSchema, userSchema} from "./schema/formSchema.ts";
-
 export type User ={
-    id: string;
+    id?: number;
     name: string;
     email: string;
 }
@@ -12,16 +9,16 @@ export type UserReq ={
 }
 
 export type Sighting={
-    id: string;
+    id?: number;
     name: string;
     shortName: string;
     airlineCode: string;
     location:string;
-    createdDate: string;
+    createdDate?: Date;
     active : boolean;
     deleted : boolean;
-    createdUser : User;
-    modifiedUser: User;
+    createdUser ?: User;
+    modifiedUser?: User;
 }
 
 export type SightingRequest={
@@ -29,10 +26,7 @@ export type SightingRequest={
     shortName: string;
     airlineCode: string;
     location:string;
-    createdDate: Date;
+    createdDate?: Date;
     createdUser : User;
 }
 
-export type userFormData = z.infer<typeof userSchema>
-
-export type sightingFormData = z.infer<typeof sightingSchema>

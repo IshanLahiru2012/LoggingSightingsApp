@@ -3,9 +3,9 @@ import {green} from "@mui/material/colors";
 import {useForm} from "react-hook-form"
 import {LoadingButton} from "@mui/lab";
 import SaveIcon from "@mui/icons-material/Save";
-import { userFormData, UserReq} from "../type.ts";
+import {UserReq} from "../type.ts";
 import {zodResolver} from "@hookform/resolvers/zod";
-import {userSchema} from "../schema/formSchema.ts";
+import {userFormData, userSchema} from "../schema/formSchema.ts";
 import {useCreateUser} from "../api/UserApi.tsx";
 import {useNavigate} from "react-router-dom";
 import {useEffect} from "react";
@@ -27,7 +27,7 @@ export const UserDetails = () => {
     }, [isSuccess, navigate, reset]);
 
     const onSubmit = async (data:userFormData)=>{
-        console.log(data);
+        console.log("awa")
         try{
             const userReq : UserReq ={
                 name : data.name,

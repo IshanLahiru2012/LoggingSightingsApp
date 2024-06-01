@@ -5,10 +5,7 @@ const FrontView = ()=>{
             <Box width="100%" maxHeight="500px">
                 <img src={front} alt="Front Image" style={{ width: '100%', height: 'auto', maxHeight: '500px' }} />
             </Box>
-
     )
-
-
 }
 
 export default FrontView;

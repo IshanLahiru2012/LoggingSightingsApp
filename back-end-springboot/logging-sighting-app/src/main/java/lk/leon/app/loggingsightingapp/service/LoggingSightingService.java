@@ -19,6 +19,10 @@ public class LoggingSightingService {
         return loggingSightingRepository.findAll();
     }
 
+    public List<LoggingSighting> getSearchSightings(String searchquery) {
+        return loggingSightingRepository.findByAnyCriteria(searchquery,searchquery,searchquery);
+    }
+
     public Optional<LoggingSighting> findById(Long id){
         return loggingSightingRepository.findById(id);
     }

@@ -8,6 +8,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,6 +25,10 @@ public class LoggingSightingController {
     public List<LoggingSighting> getAllSightings() {
         return loggingSightingService.findAll();
     }
+    @GetMapping("/search")
+    public List<LoggingSighting> getSearchSightings(@RequestParam(required = false) String searchquery) {
+        return loggingSightingService.getSearchSightings(searchquery);
+    }
     @GetMapping("/{id}")
     public ResponseEntity<LoggingSighting> getSightingById(@PathVariable Long id) {
         Optional<LoggingSighting> sighting = loggingSightingService.findById(id);
@@ -32,18 +37,17 @@ public class LoggingSightingController {
 
     @PostMapping("/create-sightings")
     public LoggingSighting createSighting(@Valid @RequestBody LoggingSighting sighting) {
-        System.out.println("awa");
-        sighting.setActive(true);
-        sighting.setDeleted(false);
+//        sighting.setCreatedDate(sighting.getCreatedDate());
         return loggingSightingService.save(sighting);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<LoggingSighting> updateSighting(@PathVariable Long id, @Valid @RequestBody LoggingSighting sighting) {
-        if (!loggingSightingService.findById(id).isPresent()) {
+    @PutMapping()
+    public ResponseEntity<LoggingSighting> updateSighting(@Valid @RequestBody LoggingSighting sighting) {
+        System.out.println(sighting.getCreatedDate());
+        if (!loggingSightingService.findById(sighting.getId()).isPresent()) {
             return ResponseEntity.notFound().build();
         }
-        sighting.setId(id);
+        sighting.setId(sighting.getId());
         return ResponseEntity.ok(loggingSightingService.save(sighting));
     }
     @DeleteMapping("/{id}")
@@ -54,6 +58,7 @@ public class LoggingSightingController {
         loggingSightingService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
+
 
 
 }
