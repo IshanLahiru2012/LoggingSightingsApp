@@ -20,11 +20,7 @@ export const Layout = ({children, showFront= false}:Props) => {
             {/*    </Box>*/}
             {/*    <Footer />*/}
             {/*</Grid>*/}
-            <Grid
-                container
-                direction="column"
-                style={{ minHeight: '100vh' }}
-            >
+            <Grid container direction="column" style={{ minHeight: '100vh' }}>
                 <CssBaseline />
                 <Grid item>
                     <Header />

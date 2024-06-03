@@ -31,8 +31,8 @@ export const SightingInfo = ({sighting}:Props) => {
         <>
             <Paper sx={{p:2, bgcolor:blue[50]}}>
                 <Grid container>
-                    <Grid item xs={4}>
-
+                    <Grid item xs={4} pl={1} pr={2}>
+                        <img src="/src/assets/main.jpg"/>
                     </Grid>
                     <Grid item xs={6}>
                         <Box>
