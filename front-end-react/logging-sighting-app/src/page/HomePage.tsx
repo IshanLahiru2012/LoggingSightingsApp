@@ -25,7 +25,7 @@ const HomePage = () => {
                 boxShadow={3} py={4} mt={-8} textAlign="center"  >
                 <Grid item xs={12}>
                     <Typography variant="h3" fontWeight="bold" color="emerald" gutterBottom>
-                        Find Your Tour Sighting
+                        Find Your Logging Sighting
                     </Typography>
                 </Grid>
                 <Grid item xs={12} >
