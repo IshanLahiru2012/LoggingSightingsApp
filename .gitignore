@@ -4,6 +4,8 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 !**/src/main/resources/firebase.json
+back-end-springboot/logging-sighting-app/src/main/resources/firebase.json
+
 
 ### IntelliJ IDEA ###
 .idea/
