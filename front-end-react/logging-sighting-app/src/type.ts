@@ -14,11 +14,12 @@ export type Sighting={
     shortName: string;
     airlineCode: string;
     location:string;
-    createdDate?: Date;
+    createdDate: Date;
     active : boolean;
     deleted : boolean;
     createdUser ?: User;
     modifiedUser?: User;
+    imageUrl : string;
 }
 
 export type SightingRequest={

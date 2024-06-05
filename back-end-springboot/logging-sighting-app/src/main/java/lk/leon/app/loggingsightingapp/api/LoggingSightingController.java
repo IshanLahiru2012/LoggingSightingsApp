@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -43,12 +44,13 @@ public class LoggingSightingController {
     }
 
     @PutMapping(consumes = "multipart/form-data")
-    public ResponseEntity<LoggingSightingTo> updateSighting(@ModelAttribute @Valid LoggingSightingReqTo sightingReq ) {
+    public ResponseEntity<LoggingSightingTo> updateSighting(@ModelAttribute @Valid LoggingSightingReqTo sightingReq ,
+                                                            @RequestParam(value = "imageFile", required = false)MultipartFile image) {
 
         if (!loggingSightingService.findById(sightingReq.getId()).isPresent()) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(loggingSightingService.updateSighting(sightingReq));
+        return ResponseEntity.ok(loggingSightingService.updateSighting(sightingReq, image));
     }
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteSighting(@PathVariable Long id) {

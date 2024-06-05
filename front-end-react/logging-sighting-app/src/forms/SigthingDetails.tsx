@@ -1,8 +1,7 @@
 import {Button, FormControl, FormHelperText, Grid, Paper, TextField, Typography} from "@mui/material";
-import {green} from "@mui/material/colors";
+import {blue, green} from "@mui/material/colors";
 import { DateTimePicker, LocalizationProvider} from "@mui/x-date-pickers";
 import {Controller, useForm} from "react-hook-form";
-import {SightingRequest} from "../type.ts";
 import {sightingFormData, sightingSchema} from "../schema/formSchema.ts";
 import { zodResolver } from '@hookform/resolvers/zod';
 import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
@@ -12,6 +11,7 @@ import { LoadingButton } from "@mui/lab";
 import SaveIcon from '@mui/icons-material/Save';
 import {useLocation, useNavigate} from "react-router-dom";
 import {useEffect, useState} from "react";
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 
 export const SigthingDetails = () => {
 
@@ -23,30 +23,39 @@ export const SigthingDetails = () => {
     const {createSighting,isLoading: isCreateLoading, isSuccess : isCreateSuccess} = useCreateSighting();
     const {updateSighting, isLoading: isUpdateLoading, isSuccess :isUpdateSuccess} = useUpdateSighting();
 
+    const [imageUrl, setImageUrl] = useState<string|undefined>(updSighting?.imageUrl || '');
+
     const form = useForm<sightingFormData>({
         resolver : zodResolver(sightingSchema),
         defaultValues:{
             active: true,
             deleted: false,
             createdDate: dayjs().toDate(),
+            imageFile: null,
         }
     });
 
     const {register,handleSubmit, formState:{errors},control} = form;
 
 
-    const onSubmit = async (data:sightingFormData)=>{
-        console.log('update')
+
+    const onSubmit = async (dataJson:sightingFormData)=>{
+        console.log(errors)
         try{
-            const sightingReq : SightingRequest ={
-                ...data,
-                createdUser : currentUser,
-            }
+            const data : FormData = new FormData();
+            Object.keys(dataJson).forEach(key => {
+                const value = dataJson[key as keyof sightingFormData];
+                data.append(key, value);
+            });
+
+            const sightingUpdate : FormData = data;
+            sightingUpdate.append('modifiedUser', currentUser.id)
+
 
             if (updSighting) {
-                await updateSighting(data);
+                await updateSighting(sightingUpdate);
             } else {
-                await createSighting(sightingReq);
+                await createSighting(data);
             }
 
         }catch (error){
@@ -59,14 +68,15 @@ export const SigthingDetails = () => {
 
     useEffect(()=>{
         if (updSighting) {
-            form.setValue('id',updSighting.id|| '')
-            form.setValue('name', updSighting.name || '');
-            form.setValue('shortName', updSighting.shortName || '');
-            form.setValue('airlineCode', updSighting.airlineCode || '');
-            form.setValue('location', updSighting.location || '');
+            form.setValue('id',updSighting.id)
+            form.setValue('name', updSighting.name);
+            form.setValue('shortName', updSighting.shortName);
+            form.setValue('airlineCode', updSighting.airlineCode);
+            form.setValue('location', updSighting.location);
             form.setValue('createdDate', new Date(updSighting.createdDate) || dayjs().toDate());
-            form.setValue('createdUser', updSighting.createdUser || '');
-            form.setValue('modifiedUser', currentUser);
+            form.setValue('createdUser', updSighting.createdUser.id);
+            form.setValue('modifiedUser', currentUser.id);
+            form.setValue('imageFile', updSighting.imageUrl)
 
             setButtonLable("Update")
         }
@@ -156,7 +166,49 @@ export const SigthingDetails = () => {
                                 </FormControl>
                             </LocalizationProvider>
                         </Grid>
+                        <Grid item xs={12} container>
+                            <Grid item xs={12}>
+                                <Typography>Upload Airline Image</Typography>
+                            </Grid>
+                            {(imageUrl ) && (
+                                <Grid item xs={12} p={2} >
+                                    <img src={imageUrl } alt="Transfer Preview" style={{ maxWidth: '100%', maxHeight: '200px' }} />
+                                </Grid>)
+                            }
+                            <Grid item xs={12} md={6}>
+                                <FormControl error={!!errors.imageFile} fullWidth >
+                                    <Controller
+                                        name="imageFile"
+                                        control={control}
+                                        render={({field}) =>(
+                                            <Button
+                                                component="label" // Button acts as a label for the hidden input
+                                                variant="contained"
+                                                sx={{backgroundColor:blue[200]}}
+                                                startIcon={<CloudUploadIcon />}
 
+                                            >
+                                                <input
+                                                    type="file"
+                                                    accept=".jpg, .jpeg, .png,"
+                                                    onChange={(event)=>{
+                                                        field.onChange(event.target.files ? event.target.files[0]:null)
+                                                        if(event.target.files?.[0]){
+                                                            setImageUrl(URL.createObjectURL(event.target.files[0]));
+                                                        }else{
+                                                            setImageUrl('');
+                                                        }
+                                                    }}
+                                                />
+                                            </Button>
+                                        )}
+                                    />
+                                    {errors.imageFile && (
+                                        <FormHelperText>{errors.imageFile?.message}</FormHelperText>
+                                    )}
+                                </FormControl>
+                            </Grid>
+                        </Grid>
                     </Grid>
                     <Grid item xs={12} p={2}>
                         {isCreateLoading || isUpdateLoading?
@@ -167,7 +219,7 @@ export const SigthingDetails = () => {
                             </LoadingButton> :
                             !currentUser ?
                                 <Button  variant="contained" onClick={()=> navigate("/login")} >Login to Submit</Button>  :
-                                <Button variant="contained" type={"submit"} >
+                                <Button variant="contained" type={"submit"} onClick={()=> console.log(errors)}>
                                     {buttonLable}
                                 </Button>
                         }

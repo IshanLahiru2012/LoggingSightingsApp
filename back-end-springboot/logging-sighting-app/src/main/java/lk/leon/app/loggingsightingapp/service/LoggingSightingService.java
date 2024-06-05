@@ -68,9 +68,9 @@ public class LoggingSightingService {
 
     }
 
-    public LoggingSightingTo updateSighting(LoggingSightingReqTo sightingReq) {
+    public LoggingSightingTo updateSighting(LoggingSightingReqTo sightingReq, MultipartFile image) {
 
-        if(loggingSightingRepository.findById(sightingReq.getId()).get().getImagePath() != null){
+        if(loggingSightingRepository.findById(sightingReq.getId()).get().getImagePath() != null && image != null){
             bucket.get("image/"+sightingReq.getId()).delete();
         }
 
@@ -82,7 +82,6 @@ public class LoggingSightingService {
         if(sightingReq.getImageFile() != null){
             savedSighting.setImagePath();
             String imageUrl = saveImage(loggingSighting.getId(),sightingReq.getImageFile());
-//            savedSighting.setImagePath("image/"+savedSighting.getId());
             loggingSightingTo.setImageUrl(imageUrl);
         }
         return loggingSightingTo;

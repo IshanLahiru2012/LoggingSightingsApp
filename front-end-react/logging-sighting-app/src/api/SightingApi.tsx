@@ -1,15 +1,13 @@
-import {Sighting, SightingRequest} from "../type.ts";
+import {Sighting} from "../type.ts";
 import {useMutation, useQuery, useQueryClient} from "react-query";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 export const useCreateSighting = () => {
-    const createSightingRequest = async (sightingRequest: SightingRequest)=>{
+    const createSightingRequest = async (sightingRequest: FormData)=>{
         const resp = await fetch(`${API_BASE_URL}/api/v1/sightings/create-sightings`,{
             method : "POST",
-            headers:{
-                "Content-Type": "application/json"
-            },
-            body : JSON.stringify(sightingRequest)
+
+            body : sightingRequest
         });
 
         if(!resp.ok){
@@ -93,14 +91,11 @@ export const useDeleteSighting = ()=>{
 
 export const useUpdateSighting = ()=>{
 
-    const updateSightingReq = async (sighting: Sighting):Promise<Sighting>=>{
+    const updateSightingReq = async (sighting: FormData):Promise<Sighting>=>{
 
         const resp = await fetch(`${API_BASE_URL}/api/v1/sightings`,{
             method:"PUT",
-            headers:{
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(sighting)
+            body: sighting
         });
 
         if(!resp.ok){
