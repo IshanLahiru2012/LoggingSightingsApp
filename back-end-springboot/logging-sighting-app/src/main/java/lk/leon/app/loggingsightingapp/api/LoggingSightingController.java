@@ -1,14 +1,15 @@
 package lk.leon.app.loggingsightingapp.api;
 
-import lk.leon.app.loggingsightingapp.entity.LoggingSighting;
+import lk.leon.app.loggingsightingapp.service.Dto.LoggingSightingReqTo;
+import lk.leon.app.loggingsightingapp.service.Dto.LoggingSightingTo;
 import lk.leon.app.loggingsightingapp.service.LoggingSightingService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,42 +23,43 @@ public class LoggingSightingController {
     private final LoggingSightingService loggingSightingService;
 
     @GetMapping
-    public List<LoggingSighting> getAllSightings() {
+    public List<LoggingSightingTo> getAllSightings() {
         return loggingSightingService.findAll();
     }
     @GetMapping("/search")
-    public List<LoggingSighting> getSearchSightings(@RequestParam(required = false) String searchquery) {
+    public List<LoggingSightingTo> getSearchSightings(@RequestParam(required = false) String searchquery) {
         return loggingSightingService.getSearchSightings(searchquery);
     }
     @GetMapping("/{id}")
-    public ResponseEntity<LoggingSighting> getSightingById(@PathVariable Long id) {
-        Optional<LoggingSighting> sighting = loggingSightingService.findById(id);
+    public ResponseEntity<LoggingSightingTo> getSightingById(@PathVariable Long id) {
+        Optional<LoggingSightingTo> sighting = loggingSightingService.findById(id);
         return sighting.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @PostMapping("/create-sightings")
-    public LoggingSighting createSighting(@Valid @RequestBody LoggingSighting sighting) {
-//        sighting.setCreatedDate(sighting.getCreatedDate());
-        return loggingSightingService.save(sighting);
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping(value = "/create-sightings", consumes = "multipart/form-data")
+    public LoggingSightingTo createSighting(@ModelAttribute @Valid LoggingSightingReqTo sightingReq) {
+        return loggingSightingService.createSighting(sightingReq);
     }
 
-    @PutMapping()
-    public ResponseEntity<LoggingSighting> updateSighting(@Valid @RequestBody LoggingSighting sighting) {
-        System.out.println(sighting.getCreatedDate());
-        if (!loggingSightingService.findById(sighting.getId()).isPresent()) {
+    @PutMapping(consumes = "multipart/form-data")
+    public ResponseEntity<LoggingSightingTo> updateSighting(@ModelAttribute @Valid LoggingSightingReqTo sightingReq ) {
+
+        if (!loggingSightingService.findById(sightingReq.getId()).isPresent()) {
             return ResponseEntity.notFound().build();
         }
-        sighting.setId(sighting.getId());
-        return ResponseEntity.ok(loggingSightingService.save(sighting));
+        return ResponseEntity.ok(loggingSightingService.updateSighting(sightingReq));
     }
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteSighting(@PathVariable Long id) {
         if (!loggingSightingService.findById(id).isPresent()) {
             return ResponseEntity.notFound().build();
         }
-        loggingSightingService.deleteById(id);
+        loggingSightingService.deleteSightingById(id);
         return ResponseEntity.noContent().build();
     }
+
+
 
 
 
