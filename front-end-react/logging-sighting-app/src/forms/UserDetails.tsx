@@ -27,7 +27,6 @@ export const UserDetails = () => {
     }, [isSuccess, navigate, reset]);
 
     const onSubmit = async (data:userFormData)=>{
-        console.log("awa")
         try{
             const userReq : UserReq ={
                 name : data.name,

@@ -31,8 +31,15 @@ export const SightingInfo = ({sighting}:Props) => {
         <>
             <Paper sx={{p:2, bgcolor:blue[50]}}>
                 <Grid container>
-                    <Grid item xs={12} md={4} p={2}>
-                        <img src={sighting.imageUrl} alt="Airline Image"/>
+                    <Grid item xs={12} md={4} px={2} py={1} >{
+                        sighting.imageUrl ?
+                        <img src={sighting.imageUrl} alt="Airline Image"  /> :
+                            <Grid item width={'100%'} height={'100%'} container justifyContent={'center'} alignItems={'center'}
+                                  border={2} borderColor={'cyan'} borderRadius={5}  >
+                                <Typography justifyContent={'center'}> No Image </Typography>
+                            </Grid>
+
+                    }
                     </Grid>
                     <Grid item xs={12} md={6}>
                         <Box>

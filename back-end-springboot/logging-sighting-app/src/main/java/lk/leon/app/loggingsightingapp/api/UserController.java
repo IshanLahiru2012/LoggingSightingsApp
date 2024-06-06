@@ -33,8 +33,7 @@ public class UserController {
 
     @PostMapping
     public User createUser(@Valid @RequestBody User user) {
-        User user1 = userService.save(user);
-        return user1;
+        return userService.save(user);
     }
 
     @PutMapping("/{id}")

@@ -43,8 +43,10 @@ public class LoggingSightingService {
         if(loggingSightingOptional.isPresent()){
             LoggingSighting loggingSighting = loggingSightingOptional.get();
             LoggingSightingTo loggingSightingTo = transformer.tologgingSightingTo(loggingSighting);
-            Blob blob = bucket.get(loggingSighting.getImagePath());
-            loggingSightingTo.setImageUrl(blob.signUrl(1,TimeUnit.DAYS, Storage.SignUrlOption.withV4Signature()).toString());
+            if(loggingSighting.getImagePath() != null){
+                Blob blob = bucket.get(loggingSighting.getImagePath());
+                loggingSightingTo.setImageUrl(blob.signUrl(1,TimeUnit.DAYS, Storage.SignUrlOption.withV4Signature()).toString());
+            }
 
             return Optional.of(loggingSightingTo);
         }
@@ -54,18 +56,17 @@ public class LoggingSightingService {
     public LoggingSightingTo createSighting(LoggingSightingReqTo sightingReq) {
 
         LoggingSighting loggingSighting = transformer.fromLoggingSightingReqTo(sightingReq);
-
         LoggingSighting savedSighting = loggingSightingRepository.save(loggingSighting);
         LoggingSightingTo loggingSightingTo = transformer.tologgingSightingTo(savedSighting);
 
-        System.out.println(sightingReq.getImageFile());
         if(sightingReq.getImageFile() != null){
             savedSighting.setImagePath();
             String imageUrl = saveImage(loggingSighting.getId(),sightingReq.getImageFile());
             loggingSightingTo.setImageUrl(imageUrl);
+        }else {
+            savedSighting.setImagePath(null);
         }
         return loggingSightingTo;
-
     }
 
     public LoggingSightingTo updateSighting(LoggingSightingReqTo sightingReq, MultipartFile image) {
@@ -75,7 +76,7 @@ public class LoggingSightingService {
         }
 
         LoggingSighting loggingSighting = transformer.fromLoggingSightingReqTo(sightingReq);
-
+        String prevImagePath = loggingSightingRepository.findById(sightingReq.getId()).get().getImagePath();
         LoggingSighting savedSighting = loggingSightingRepository.save(loggingSighting);
         LoggingSightingTo loggingSightingTo = transformer.tologgingSightingTo(savedSighting);
 
@@ -83,6 +84,10 @@ public class LoggingSightingService {
             savedSighting.setImagePath();
             String imageUrl = saveImage(loggingSighting.getId(),sightingReq.getImageFile());
             loggingSightingTo.setImageUrl(imageUrl);
+        }else if(prevImagePath != null){
+            savedSighting.setImagePath();
+            Blob blob = bucket.get(savedSighting.getImagePath());
+            loggingSightingTo.setImageUrl(blob.signUrl(1, TimeUnit.DAYS, Storage.SignUrlOption.withV4Signature()).toString());
         }
         return loggingSightingTo;
 

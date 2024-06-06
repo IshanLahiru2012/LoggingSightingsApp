@@ -36,24 +36,18 @@ export const SigthingDetails = () => {
     });
 
     const {register,handleSubmit, formState:{errors},control} = form;
-
-
-
     const onSubmit = async (dataJson:sightingFormData)=>{
-        console.log(errors)
         try{
             const data : FormData = new FormData();
             Object.keys(dataJson).forEach(key => {
                 const value = dataJson[key as keyof sightingFormData];
-                data.append(key, value);
+                if (value !== undefined && value !== null) {
+                    data.append(key, value);
+                }
             });
 
-            const sightingUpdate : FormData = data;
-            sightingUpdate.append('modifiedUser', currentUser.id)
-
-
             if (updSighting) {
-                await updateSighting(sightingUpdate);
+                await updateSighting(data);
             } else {
                 await createSighting(data);
             }
@@ -63,8 +57,6 @@ export const SigthingDetails = () => {
         }
     }
     const [buttonLable, setButtonLable] = useState("Submit")
-
-
 
     useEffect(()=>{
         if (updSighting) {
@@ -76,15 +68,15 @@ export const SigthingDetails = () => {
             form.setValue('createdDate', new Date(updSighting.createdDate) || dayjs().toDate());
             form.setValue('createdUser', updSighting.createdUser.id);
             form.setValue('modifiedUser', currentUser.id);
-            form.setValue('imageFile', updSighting.imageUrl)
 
             setButtonLable("Update")
+        }else {
+            form.setValue('createdUser', currentUser.id);
         }
     },[updSighting, form]);
 
     useEffect(() => {
         if (isCreateSuccess || isUpdateSuccess) {
-            console.log("update done")
             navigate("/sightings");
         }
     }, [isCreateSuccess, isUpdateSuccess, navigate]);
@@ -170,9 +162,9 @@ export const SigthingDetails = () => {
                             <Grid item xs={12}>
                                 <Typography>Upload Airline Image</Typography>
                             </Grid>
-                            {(imageUrl ) && (
+                            {(imageUrl || updSighting?.imageUrl ) && (
                                 <Grid item xs={12} p={2} >
-                                    <img src={imageUrl } alt="Transfer Preview" style={{ maxWidth: '100%', maxHeight: '200px' }} />
+                                    <img src={imageUrl || updSighting.imageUrl } alt="Transfer Preview" style={{ maxWidth: '100%', maxHeight: '200px' }} />
                                 </Grid>)
                             }
                             <Grid item xs={12} md={6}>
@@ -182,11 +174,10 @@ export const SigthingDetails = () => {
                                         control={control}
                                         render={({field}) =>(
                                             <Button
-                                                component="label" // Button acts as a label for the hidden input
+                                                component="label"
                                                 variant="contained"
                                                 sx={{backgroundColor:blue[200]}}
                                                 startIcon={<CloudUploadIcon />}
-
                                             >
                                                 <input
                                                     type="file"
@@ -219,15 +210,13 @@ export const SigthingDetails = () => {
                             </LoadingButton> :
                             !currentUser ?
                                 <Button  variant="contained" onClick={()=> navigate("/login")} >Login to Submit</Button>  :
-                                <Button variant="contained" type={"submit"} onClick={()=> console.log(errors)}>
+                                <Button variant="contained" type={"submit"} >
                                     {buttonLable}
                                 </Button>
                         }
                     </Grid>
                 </form>
             </Paper>
-
-
         </>
     );
 };

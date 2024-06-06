@@ -27,7 +27,6 @@ public class Transformer {
 
     public LoggingSightingTo tologgingSightingTo(LoggingSighting LoggingSighting){
         LoggingSightingTo loggingSightingTo = modelMapper.map(LoggingSighting, LoggingSightingTo.class);
-
         return loggingSightingTo;
     }
 }

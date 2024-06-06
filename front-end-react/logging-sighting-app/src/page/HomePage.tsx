@@ -11,13 +11,11 @@ const HomePage = () => {
     const {searchResult,isLoading,isSuccess} = useSearchSightings(searchquery);
     const handleSearchSubmit = (searchFormValues:SearchFrom)=>{
         setSearchquery(searchFormValues.searchQuery);
-
     }
     useEffect(()=>{
         if(isSuccess){
             navigate("/sightings", {state:{sighting : searchResult}})
         }
-
     },[isLoading,navigate, searchResult,isSuccess])
     return (
         <Box display="flex" flexDirection="column" gap={3} px={1}  >

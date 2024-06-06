@@ -11,7 +11,9 @@ export type userFormData = z.infer<typeof userSchema>
 
 const fileOrStringSchema = z.union([
     z.instanceof(File, { message: 'Must be a file and image is required ' }),
-    z.string().url({ message: 'Must be a valid URL' }),
+    // z.string().url({ message: 'Must be a valid URL' }),
+    z.null(),
+    z.undefined()
 ]);
 
 export const sightingSchema = z.object({
